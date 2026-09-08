@@ -4,6 +4,25 @@ A model-agnostic B2B business copilot framework for prospecting, inquiry analysi
 
 The repository externalizes reusable business behavior so the operating method can survive changes in AI model or agent platform.
 
+## Architecture principle: Generic Core First
+
+No platform is the center of this repository.
+
+```text
+Business Core
++ Company Pack
++ Customer Memory
++ Evals
+        ↓
+Platform Adapter
+        ↓
+Codex / Claude Code / DeepSeek Harness / WorkBuddy / Accio Work / future platform
+        ↓
+Target model + available tools
+```
+
+Platform-specific files are adapters only. Business logic must remain canonical in the Core, Skills, Cases, Company Packs, Memory rules, and Evals.
+
 ## What V1 contains
 
 - **1 primary Business Copilot entry** — `AGENTS.md`
@@ -21,7 +40,7 @@ The repository externalizes reusable business behavior so the operating method c
 ```text
 User task
    ↓
-Agent entry
+Platform adapter / agent entry
    ↓
 Model-agnostic runtime rules
    ↓
@@ -71,7 +90,7 @@ The current RUNTONG / WAYEAH pack is under:
 
 It includes company positioning, product capabilities, supply-chain model, compliance boundaries, markets/customers, SOP, source provenance, and on-demand product-category files.
 
-A different company should add or replace a Company Pack without changing the core Kernel or Skills.
+A different company should add or replace a Company Pack without changing the Core Kernel or Skills.
 
 ## Customer memory
 
@@ -102,9 +121,16 @@ Current evaluation assets include:
 
 A model does not need identical wording to pass. It must preserve factual discipline, business diagnosis, strategy quality, risk boundaries, response depth, and business usefulness.
 
-## Portability
+## Platform portability
 
-Platform adapters must remain thin. Business logic belongs in the core repository, not duplicated in GPT-, Codex-, DeepSeek-, Claude-, Gemini-, or other platform-specific files.
+See:
+
+- `adapters/PLATFORM_ADAPTER_CONTRACT.md`
+- `adapters/COMPATIBILITY_MATRIX.md`
+
+The current architecture is intended to adapt to Codex, Claude Code, DeepSeek Harness, WorkBuddy / CodeBuddy, Accio Work, and future agent platforms through thin adapters.
+
+Do not prebuild every native adapter. Implement a native adapter when the platform is actually selected, then run the same canonical Evals.
 
 If a target harness lacks a capability such as web search, file reading, browser access, or persistent memory, the AI must not pretend that capability exists.
 
