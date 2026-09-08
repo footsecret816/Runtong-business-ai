@@ -31,6 +31,8 @@ Each benchmark case defines:
 - EVAL-007 — Mixed SKU order vs production MOQ
 - EVAL-008 — Existing-customer operational tone
 - EVAL-009 — Irregular shape and false precision
+- EVAL-010 — Price negotiation near floor
+- EVAL-011 — Production before deposit exception
 
 ## Suggested use
 Run the same benchmark set on GPT/Codex, DeepSeek, Claude, Gemini, or another model/harness before switching production usage.
