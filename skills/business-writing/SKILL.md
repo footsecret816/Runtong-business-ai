@@ -19,6 +19,8 @@ Turn business intent into natural, concise, commercially effective B2B communica
 - Match tone to relationship and task: new prospect, existing customer, negotiation, technical issue, stalled project, or risk-sensitive communication.
 - When the user asks for a revision, preserve the parts they did not ask to change unless consistency requires a small adjustment.
 
+Use `STYLE-PATTERNS.md` for reusable tone, structure, revision, follow-up, and information-discipline patterns.
+
 ## Follow-up principle
 A follow-up should have a reason to re-enter the conversation: project concern, useful update, decision reopening, value addition, deadline, or relationship maintenance. Avoid generic repeated chasing.
 
