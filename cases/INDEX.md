@@ -5,6 +5,7 @@ The case library teaches transferable business patterns. It must not contain ide
 ## Structure
 - `golden/` — approved abstract examples of strong business reasoning and communication.
 - `anti-patterns/` — common failure modes to avoid.
+- `CASE-EXTRACTION-GUIDE.md` — rules for turning real projects into reusable, non-identifying cases.
 
 ## Retrieval rule
 Retrieve cases by **business pattern**, not by product name or exact wording. Prefer similarity in:
@@ -29,6 +30,8 @@ Product category is secondary unless technically material.
 | GC-ORD-008 | Mixed SKU/pack order vs production MOQ | order confirmation | customer-analysis, gap-strategy, negotiation | pack conversion, colors, batch MOQ |
 | GC-REL-009 | Natural tone for existing-customer update | any ongoing project stage | business-writing | existing customer, concise update, tone |
 | GC-TECH-010 | Irregular shape cannot be defined by simple 2D dimensions | technical development | factory-bridge, gap-strategy | geometry, false precision, physical reference |
+| GC-NEG-011 | Price negotiation near the commercial floor | late negotiation | negotiation, gap-strategy, business-writing | price floor, final review, relationship |
+| GC-RISK-012 | Production before deposit as controlled exception | order / production | negotiation, risk-guard, project-next-action | deposit, exception, approval, delivery |
 
 ## Anti-pattern index
 | ID | Failure mode | Why it matters |
