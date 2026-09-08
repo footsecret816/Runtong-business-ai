@@ -21,6 +21,8 @@ Each benchmark case defines:
 - prohibited behaviors,
 - optional strong behaviors.
 
+Use `SCORING.md` for the 0–2 scoring rubric and critical-fail rules. Use `RUN-TEMPLATE.md` to record comparable model/harness runs.
+
 ## Current benchmark set
 - EVAL-001 — Hard MOQ vs trial order
 - EVAL-002 — Annual volume vs per-order pricing
