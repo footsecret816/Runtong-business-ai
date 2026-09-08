@@ -32,6 +32,7 @@ Product category is secondary unless technically material.
 | GC-TECH-010 | Irregular shape cannot be defined by simple 2D dimensions | technical development | factory-bridge, gap-strategy | geometry, false precision, physical reference |
 | GC-NEG-011 | Price negotiation near the commercial floor | late negotiation | negotiation, gap-strategy, business-writing | price floor, final review, relationship |
 | GC-RISK-012 | Production before deposit as controlled exception | order / production | negotiation, risk-guard, project-next-action | deposit, exception, approval, delivery |
+| GC-PRO-013 | Credibility building with proof and NDA boundary | prospecting / inquiry | prospecting, business-writing, risk-guard | credibility, customer reference, NDA, proof |
 
 ## Anti-pattern index
 | ID | Failure mode | Why it matters |
