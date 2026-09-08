@@ -9,7 +9,7 @@ Preserve and externalize the useful business-assistance behavior developed throu
 - 1 model-agnostic runtime contract
 - 8 broad business skills
 - abstract golden cases and anti-patterns
-- reusable business knowledge layer
+- reusable business knowledge layer with swappable Company Packs
 - customer memory schema separated from reusable cases
 - cross-model evaluation suite
 - thin platform adapters
@@ -20,6 +20,7 @@ Model intelligence should remain useful, but critical business behavior must not
 The framework therefore externalizes the behaviors most likely to be lost when switching models:
 - task intent recognition,
 - context discipline,
+- source precedence and superseded-fact handling,
 - fact vs inference separation,
 - strategy-before-writing for complex issues,
 - selective skill routing,
@@ -35,3 +36,19 @@ The framework therefore externalizes the behaviors most likely to be lost when s
 
 ## Portability principle
 The intended invariant is business method, not identical wording. A different model may write differently, but should preserve factual discipline, reasoning pattern, negotiation logic, risk boundaries, and business usefulness.
+
+## V1 acceptance status
+Architecture-level end-to-end simulation completed on the current model using five realistic workflows:
+- new prospect development,
+- hard MOQ conflict,
+- material/sample deviation,
+- simple interpretation,
+- conflicting project memory + company-general compliance scope.
+
+Result: **PASS WITH ONE FIX APPLIED**.
+
+The fix formalized active-project source precedence so newer explicit project facts cannot be overridden by older memory, company-general knowledge, or abstract cases.
+
+See `evals/E2E-ACCEPTANCE-V1.md`.
+
+This result does not prove equivalent behavior on DeepSeek, Claude, Gemini, or another model. Target models must run the same benchmark and E2E suite before production replacement.
