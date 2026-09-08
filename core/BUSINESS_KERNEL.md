@@ -18,6 +18,8 @@ Determine, when relevant:
 
 Load only context needed for the task.
 
+When multiple context sources exist, resolve active project state using the source-precedence rules in `MODEL_AGNOSTIC_RUNTIME.md`. In particular, do not let older customer memory, company-general knowledge, or abstract cases override a newer explicit user correction about the active project.
+
 ## Step 3 — Resolve evidence
 Classify important information as:
 - `CONFIRMED` — explicitly confirmed,
@@ -25,7 +27,7 @@ Classify important information as:
 - `UNKNOWN` — not known,
 - `TO_CONFIRM` — materially important and requires confirmation.
 
-If two sources conflict, surface the conflict rather than silently choosing one.
+If two same-scope sources conflict and precedence/freshness does not resolve the conflict, surface it rather than silently choosing one.
 
 ## Step 4 — Choose depth
 - **Direct**: meaning, translation nuance, simple clarification.
@@ -53,6 +55,7 @@ Before finalizing, check:
 - Did I answer the user's actual question?
 - Did I invent or overstate any fact?
 - Did I preserve the user's numbers and confirmed details?
+- Did I accidentally use a superseded or lower-scope fact?
 - Did I miss any customer question or business constraint?
 - Is the recommended strategy commercially coherent?
 - Is the output too long or too structured for the task?
