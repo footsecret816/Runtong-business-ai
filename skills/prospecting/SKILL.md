@@ -12,7 +12,7 @@ New account research, trade-show leads, website/LinkedIn prospects, marketplace 
 - visible product portfolio and positioning,
 - likely OEM/private-label fit when evidence supports it,
 - product or assortment gaps,
-- Runtong/company capability match,
+- active company capability match,
 - development priority,
 - best commercial entry point,
 - recommended outreach angle.
@@ -21,4 +21,4 @@ New account research, trade-show leads, website/LinkedIn prospects, marketplace 
 Recommend a small number of high-fit development angles instead of sending the full catalogue by default.
 
 ## Boundary
-Do not claim purchasing volume, supplier relationships, private-label activity, or business scale without evidence. Label inferred opportunity as a recommendation, not a fact.
+Do not claim purchasing volume, supplier relationships, private-label activity, or business scale without evidence. Label inferred opportunity as a recommendation, not a fact. Company-specific capabilities must come from the active company knowledge pack, not from this reusable skill.
