@@ -12,9 +12,17 @@ No platform is the architectural center. Codex, Claude Code, DeepSeek Harness, W
 
 ## Repository root portability
 
-Every adapter must resolve a logical `REPO_ROOT` at runtime.
+Every adapter must resolve a logical `REPO_ROOT` automatically at runtime.
 
-`REPO_ROOT` means the root of the currently cloned, mounted, or opened `Runtong-business-ai` repository. It is not a fixed operating-system path.
+`REPO_ROOT` means the active repository/workspace root of this Business AI Harness. It is not a fixed operating-system path and normal users should not need to type or configure it manually.
+
+Use this resolution order:
+
+1. **Platform root first** — use the repository / workspace / project root supplied by the active agent platform, if it contains the expected canonical structure.
+2. **Upward discovery** — if execution starts inside a repository subdirectory, walk upward until a directory containing `AGENTS.md`, `core/`, and `skills/` is found.
+3. **Package / plugin root** — when the Harness is installed or imported as a plugin, package, extension, or managed project, use the platform-provided install/package root if the canonical structure is present.
+4. **Remote repository root** — when the platform exposes repository contents through a connector or remote-repository context without a local clone, use that repository as the logical `REPO_ROOT`.
+5. **Manual fallback only** — only if all automatic resolution methods fail, ask the runtime/user to open, mount, clone, select, or identify the repository. Manual absolute-path entry is a last-resort fallback, not part of normal installation.
 
 A valid `REPO_ROOT` should contain the expected canonical structure, including at minimum:
 
@@ -28,13 +36,14 @@ Adapters must not:
 
 - hard-code a developer's local absolute path;
 - assume a drive letter, username, home directory, or installation folder;
+- require normal users to manually configure an absolute repository path when the platform already supplies workspace/project/repository context;
 - persist a discovered machine-local path into Business Memory, Company Knowledge, Golden Cases, or reusable adapter configuration;
 - silently reuse a path learned on another machine;
 - guess a local repository path when the root cannot be resolved.
 
 Examples of machine-specific paths that must never become canonical configuration include `D:\...`, `C:\Users\...`, `/Users/...`, and `/home/<user>/...`.
 
-If `REPO_ROOT` cannot be resolved reliably, the adapter must ask the runtime/user to mount, clone, open, or identify the repository. A platform may maintain a machine-local path in ephemeral runtime/session state, but that value is environment-specific and must remain outside reusable business memory.
+A platform may maintain a resolved machine-local path in ephemeral runtime/session state, but that value is environment-specific and must remain outside reusable business memory.
 
 ## Canonical sources
 
@@ -57,7 +66,7 @@ If an adapter conflicts with a canonical business rule, the canonical rule wins.
 A platform adapter may define only the platform-specific mechanics needed to run the canonical framework:
 
 1. **Boot entry** — which platform file or instruction surface starts the agent.
-2. **Repository-root resolution** — how the platform finds the active `REPO_ROOT` without hard-coding machine-specific paths.
+2. **Repository-root resolution** — how the platform auto-resolves the active `REPO_ROOT` without hard-coding or normally asking for machine-specific paths.
 3. **Context map** — how the platform finds the Runtime Contract, Kernel, Company Pack, Cases, and Memory relative to `REPO_ROOT`.
 4. **Skill packaging** — how canonical skills are exposed through the platform's skill/plugin format.
 5. **Tool map** — which required capabilities actually exist: web, browser, file/image/PDF reading, shell, MCP, calendar, email, database, etc.
@@ -102,7 +111,7 @@ When the platform lacks a required capability:
 ## Adapter readiness levels
 
 - **A0 — Generic**: platform can receive the generic system/runtime instructions manually.
-- **A1 — Booted**: native platform entry file/config correctly resolves `REPO_ROOT` and points to the canonical core.
+- **A1 — Booted**: native platform entry file/config auto-resolves `REPO_ROOT` and points to the canonical core.
 - **A2 — Skills mapped**: relevant skills can be discovered or invoked on demand.
 - **A3 — Tools & memory mapped**: required external capabilities and customer-memory bridge are configured without leaking machine-local runtime state into reusable memory.
 - **A4 — Evaluated**: target model/harness passes the required benchmark, Company Pack, and E2E acceptance thresholds.
