@@ -3,11 +3,18 @@
 Use this file when the target agent platform does not have a native repository instruction format.
 
 ## Repository root resolution
-Define `REPO_ROOT` as the root of the currently cloned, mounted, or opened `Runtong-business-ai` repository.
+Define `REPO_ROOT` as the active repository/workspace root for this Business AI Harness.
 
-Resolve all canonical paths from `REPO_ROOT`. Do not assume or persist a machine-specific absolute path. If `REPO_ROOT` cannot be resolved reliably, ask the runtime/user to mount, clone, open, or identify the repository instead of guessing.
+Resolve it automatically in this order:
+1. use the platform-provided repository / workspace / project root when valid;
+2. if running inside a subdirectory, walk upward until `AGENTS.md`, `core/`, and `skills/` are found together;
+3. if installed/imported as a plugin or package, use its platform-provided package/install root when the canonical structure is present;
+4. if the platform provides remote repository context without a local clone, use that remote repository as the logical root;
+5. only when all automatic methods fail, ask the runtime/user to open, mount, clone, select, or identify the repository.
 
-Machine-local absolute paths are runtime state only and must not be stored as reusable Business Memory, Company Knowledge, case content, or adapter configuration.
+Normal setup must not require users to type an absolute local path. Manual absolute-path entry is a last-resort fallback only.
+
+Resolve all canonical paths from `REPO_ROOT`. Do not assume or persist a machine-specific absolute path. Machine-local paths are runtime state only and must not be stored as reusable Business Memory, Company Knowledge, case content, or adapter configuration.
 
 ## Boot sequence
 - Treat this repository as a Business AI Harness, not a prompt collection.

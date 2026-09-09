@@ -17,11 +17,26 @@ Additional native adapters should be implemented only when that platform is actu
 
 All adapters must resolve the active repository root dynamically as logical `REPO_ROOT`.
 
-The framework must work regardless of where a user clones, mounts, or opens the repository. A local path such as `D:\AI\Runtong-business-ai`, `E:\Work\BusinessAI`, or `/Users/name/projects/Runtong-business-ai` is environment-specific runtime state, not canonical configuration.
+### Normal user experience
+
+The expected setup is zero-config for local paths:
+
+`Clone / Import / Install / Open → platform provides or discovers workspace root → REPO_ROOT resolves automatically → agent runs`
+
+Users should not normally be asked to copy or type a local absolute repository path.
+
+Use this priority:
+1. platform-provided repository / workspace / project root;
+2. upward discovery from the current working directory until `AGENTS.md`, `core/`, and `skills/` are found together;
+3. platform-provided plugin/package/install root;
+4. logical remote-repository root when using connector/remote repository context;
+5. manual open/mount/clone/select/identify only as the final fallback.
+
+The framework must work regardless of where a user clones, mounts, imports, or installs the repository. A local path such as `D:\AI\Runtong-business-ai`, `E:\Work\BusinessAI`, or `/Users/name/projects/Runtong-business-ai` is environment-specific runtime state, not canonical configuration.
 
 Adapters must not hard-code, guess, or persist machine-specific absolute paths into reusable agent instructions, Business Memory, Company Knowledge, Golden Cases, or shared configuration.
 
-All canonical repository references should resolve relative to `REPO_ROOT`. If the runtime cannot identify the repository root reliably, it should ask the user/platform to open, mount, clone, or identify it rather than assuming a path from another machine.
+All canonical repository references should resolve relative to `REPO_ROOT`.
 
 ## Two separate questions
 
@@ -63,4 +78,4 @@ A platform being technically compatible does not mean it is production-validated
 
 ## Portability target
 
-Switching model/platform or moving the repository to another computer/path should require environment or adapter changes only, never rewriting the business methodology.
+Switching model/platform or moving the repository to another computer/path should require no business-logic rewrite and, under normal platform operation, no manual local-path configuration.
