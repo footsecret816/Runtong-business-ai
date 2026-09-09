@@ -13,6 +13,16 @@ Adapters connect a target model/platform to the reusable Business AI Core. They 
 
 Additional native adapters should be implemented only when that platform is actually going to be used.
 
+## Repository portability
+
+All adapters must resolve the active repository root dynamically as logical `REPO_ROOT`.
+
+The framework must work regardless of where a user clones, mounts, or opens the repository. A local path such as `D:\AI\Runtong-business-ai`, `E:\Work\BusinessAI`, or `/Users/name/projects/Runtong-business-ai` is environment-specific runtime state, not canonical configuration.
+
+Adapters must not hard-code, guess, or persist machine-specific absolute paths into reusable agent instructions, Business Memory, Company Knowledge, Golden Cases, or shared configuration.
+
+All canonical repository references should resolve relative to `REPO_ROOT`. If the runtime cannot identify the repository root reliably, it should ask the user/platform to open, mount, clone, or identify it rather than assuming a path from another machine.
+
 ## Two separate questions
 
 When evaluating a target platform, distinguish:
@@ -53,4 +63,4 @@ A platform being technically compatible does not mean it is production-validated
 
 ## Portability target
 
-Switching model/platform should require adapter/tool changes, not rewriting the business methodology.
+Switching model/platform or moving the repository to another computer/path should require environment or adapter changes only, never rewriting the business methodology.
