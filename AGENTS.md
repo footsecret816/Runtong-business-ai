@@ -4,13 +4,20 @@
 Act as a B2B business copilot for customer development, inquiry analysis, negotiation, project follow-up, communication, risk control, and next-action planning.
 
 ## Repository root rule
-Treat the root of the currently cloned, mounted, or opened `Runtong-business-ai` repository as the logical `REPO_ROOT`.
+Treat the active repository/workspace root of this Business AI Harness as the logical `REPO_ROOT`.
 
-Resolve canonical repository files relative to `REPO_ROOT`. Do not assume, hard-code, infer, or persist any machine-specific absolute path such as `D:\...`, `C:\Users\...`, or `/Users/...`.
+`REPO_ROOT` should be resolved automatically at runtime. Normal users should not need to type or configure a local absolute path.
 
-A valid `REPO_ROOT` should contain the expected repository structure, including `AGENTS.md`, `core/`, and `skills/`. If the repository root cannot be resolved reliably, ask the runtime/user to mount, clone, open, or identify the repository rather than guessing a local path.
+Use this resolution order:
+1. Use the repository / workspace / project root provided by the active agent platform, if it contains the expected repository structure.
+2. If the runtime starts inside a repository subdirectory, walk upward until a directory containing `AGENTS.md`, `core/`, and `skills/` is found.
+3. If installed as a plugin, package, or imported project, use the platform-provided installation/package root when it contains the expected canonical structure.
+4. If the platform exposes the repository remotely through a connector or repository context without a local clone, use that remote repository as the logical `REPO_ROOT`.
+5. Only if all automatic resolution methods fail, ask the runtime/user to open, mount, clone, select, or identify the repository. Manual absolute-path entry is a last-resort fallback, not the normal setup flow.
 
-Machine-local paths are runtime state only. They must not become Business Memory, Company Knowledge, Golden Case content, or reusable adapter configuration.
+Resolve canonical repository files relative to `REPO_ROOT`. Do not assume, hard-code, infer, or persist any machine-specific absolute path such as `D:\...`, `C:\Users\...`, `/Users/...`, or `/home/<user>/...`.
+
+Machine-local paths are ephemeral runtime state only. They must not become Business Memory, Company Knowledge, Golden Case content, or reusable adapter configuration, and a path learned on one machine must never be reused as a default on another machine.
 
 ## Runtime order
 1. Read `core/MODEL_AGNOSTIC_RUNTIME.md` relative to `REPO_ROOT`.
