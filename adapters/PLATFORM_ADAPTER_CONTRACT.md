@@ -10,17 +10,45 @@ The repository follows **Generic Core First**:
 
 No platform is the architectural center. Codex, Claude Code, DeepSeek Harness, WorkBuddy, Accio Work, and future platforms are peers at the adapter layer.
 
+## Repository root portability
+
+Every adapter must resolve a logical `REPO_ROOT` at runtime.
+
+`REPO_ROOT` means the root of the currently cloned, mounted, or opened `Runtong-business-ai` repository. It is not a fixed operating-system path.
+
+A valid `REPO_ROOT` should contain the expected canonical structure, including at minimum:
+
+- `AGENTS.md`
+- `core/`
+- `skills/`
+
+All canonical repository references must resolve relative to `REPO_ROOT`.
+
+Adapters must not:
+
+- hard-code a developer's local absolute path;
+- assume a drive letter, username, home directory, or installation folder;
+- persist a discovered machine-local path into Business Memory, Company Knowledge, Golden Cases, or reusable adapter configuration;
+- silently reuse a path learned on another machine;
+- guess a local repository path when the root cannot be resolved.
+
+Examples of machine-specific paths that must never become canonical configuration include `D:\...`, `C:\Users\...`, `/Users/...`, and `/home/<user>/...`.
+
+If `REPO_ROOT` cannot be resolved reliably, the adapter must ask the runtime/user to mount, clone, open, or identify the repository. A platform may maintain a machine-local path in ephemeral runtime/session state, but that value is environment-specific and must remain outside reusable business memory.
+
 ## Canonical sources
 
 An adapter must point to, not duplicate, the canonical sources:
 
-- `/core/MODEL_AGNOSTIC_RUNTIME.md`
-- `/core/BUSINESS_KERNEL.md`
-- `/skills/`
-- `/cases/`
-- `/knowledge/company-packs/`
-- `/schemas/customer-memory.md`
-- `/evals/`
+- `<REPO_ROOT>/core/MODEL_AGNOSTIC_RUNTIME.md`
+- `<REPO_ROOT>/core/BUSINESS_KERNEL.md`
+- `<REPO_ROOT>/skills/`
+- `<REPO_ROOT>/cases/`
+- `<REPO_ROOT>/knowledge/company-packs/`
+- `<REPO_ROOT>/schemas/customer-memory.md`
+- `<REPO_ROOT>/evals/`
+
+`<REPO_ROOT>` is a logical runtime placeholder, not a literal folder name.
 
 If an adapter conflicts with a canonical business rule, the canonical rule wins.
 
@@ -29,13 +57,14 @@ If an adapter conflicts with a canonical business rule, the canonical rule wins.
 A platform adapter may define only the platform-specific mechanics needed to run the canonical framework:
 
 1. **Boot entry** — which platform file or instruction surface starts the agent.
-2. **Context map** — how the platform finds the Runtime Contract, Kernel, Company Pack, Cases, and Memory.
-3. **Skill packaging** — how canonical skills are exposed through the platform's skill/plugin format.
-4. **Tool map** — which required capabilities actually exist: web, browser, file/image/PDF reading, shell, MCP, calendar, email, database, etc.
-5. **Memory bridge** — how customer/project memory is retrieved and updated without copying raw memory into the reusable core.
-6. **Permission boundary** — how the platform enforces or surfaces sensitive actions, approvals, and unavailable tools.
-7. **Degradation behavior** — what the agent must do when a required platform capability is unavailable.
-8. **Evaluation entry** — how the target model/harness runs the canonical benchmark and E2E suite.
+2. **Repository-root resolution** — how the platform finds the active `REPO_ROOT` without hard-coding machine-specific paths.
+3. **Context map** — how the platform finds the Runtime Contract, Kernel, Company Pack, Cases, and Memory relative to `REPO_ROOT`.
+4. **Skill packaging** — how canonical skills are exposed through the platform's skill/plugin format.
+5. **Tool map** — which required capabilities actually exist: web, browser, file/image/PDF reading, shell, MCP, calendar, email, database, etc.
+6. **Memory bridge** — how customer/project memory is retrieved and updated without copying raw memory or machine-local runtime state into the reusable core.
+7. **Permission boundary** — how the platform enforces or surfaces sensitive actions, approvals, and unavailable tools.
+8. **Degradation behavior** — what the agent must do when a required platform capability is unavailable.
+9. **Evaluation entry** — how the target model/harness runs the canonical benchmark and E2E suite.
 
 ## Adapter prohibitions
 
@@ -73,9 +102,9 @@ When the platform lacks a required capability:
 ## Adapter readiness levels
 
 - **A0 — Generic**: platform can receive the generic system/runtime instructions manually.
-- **A1 — Booted**: native platform entry file/config correctly points to the canonical core.
+- **A1 — Booted**: native platform entry file/config correctly resolves `REPO_ROOT` and points to the canonical core.
 - **A2 — Skills mapped**: relevant skills can be discovered or invoked on demand.
-- **A3 — Tools & memory mapped**: required external capabilities and customer-memory bridge are configured.
+- **A3 — Tools & memory mapped**: required external capabilities and customer-memory bridge are configured without leaking machine-local runtime state into reusable memory.
 - **A4 — Evaluated**: target model/harness passes the required benchmark, Company Pack, and E2E acceptance thresholds.
 
 Only A4 should be described as production-validated for this Business AI Harness.
