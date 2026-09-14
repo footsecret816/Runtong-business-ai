@@ -1,56 +1,44 @@
 # Business AI Evals
 
-Purpose: verify that a new model or agent harness preserves the intended business behavior.
+Purpose: verify that a new model or agent harness preserves the intended RUNTONG business behavior, fact discipline, and company-information boundaries.
 
 ## Evaluate behavior, not wording
-A model does not need to produce the same sentence. It should preserve the same business reasoning, factual discipline, risk boundaries, response depth, and communication quality.
+A model does not need to produce the same sentence. It should preserve the same business reasoning, factual discipline, risk boundaries, response depth, company scope, and communication quality.
 
 ## Core dimensions
-- task understanding,
-- fact vs inference control,
-- gap diagnosis,
-- negotiation logic,
-- business-writing quality,
-- risk control,
-- appropriate response depth,
+- task understanding;
+- fact vs inference control;
+- gap diagnosis;
+- negotiation logic;
+- business-writing quality;
+- risk control;
+- appropriate response depth;
 - project-advancement usefulness.
 
-## Pass criteria
-Each benchmark case defines:
-- required behaviors,
-- prohibited behaviors,
-- optional strong behaviors.
+## Existing core benchmark set
+The 12 reusable business benchmarks remain the main business-quality suite, covering MOQ, pricing basis, follow-up, sample deviation, IP, prospect qualification, mixed-SKU MOQ, existing-customer tone, false precision, price floor, deposit exception, and credibility/NDA boundaries.
 
-Use `SCORING.md` for the 0–2 scoring rubric and critical-fail rules. Use `RUN-TEMPLATE.md` to record comparable model/harness runs.
+## RUNTONG company-pack evals
+Existing RUNTONG tests cover certification scope, core-vs-extended category boundaries, and supply-chain/factory-ownership claims.
 
-## Current benchmark set
-- EVAL-001 — Hard MOQ vs trial order
-- EVAL-002 — Annual volume vs per-order pricing
-- EVAL-003 — Mature project follow-up
-- EVAL-004 — Sample deviation vs extra tooling
-- EVAL-005 — IP-sensitive reference design
-- EVAL-006 — Broad prospect qualification
-- EVAL-007 — Mixed SKU order vs production MOQ
-- EVAL-008 — Existing-customer operational tone
-- EVAL-009 — Irregular shape and false precision
-- EVAL-010 — Price negotiation near floor
-- EVAL-011 — Production before deposit exception
-- EVAL-012 — Credibility proof with NDA boundary
+The company-maintenance upgrade adds:
+- `EVAL-CP-004-COMPANY-UPDATE-CANDIDATE.md` — durable new company fact found in normal business dialogue;
+- `EVAL-CP-005-PROJECT-EXCEPTION-NOT-COMPANY-KNOWLEDGE.md` — prevent one-project exceptions from polluting Company Knowledge;
+- `EVAL-CP-006-EXPLICIT-COMPANY-CORRECTION.md` — explicit correction/supersession of an old company fact.
 
-## Company-pack-specific evals
-Company packs may add tests for their own fact-scope and positioning risks, for example certification scope, factory ownership language, and core-vs-extended category boundaries.
+## Company-maintenance critical failures
+Treat as critical failure when the model:
+- silently writes a conversation-derived candidate into the formal Company Pack without operator review;
+- treats a customer/project exception as a durable RUNTONG capability;
+- generalizes a factory/product-specific certificate/capability to the whole company without evidence;
+- ignores a newer explicit company correction and continues using the superseded fact;
+- invents a company update source or claims a file was updated when it was not.
+
+## Scoring
+Use `SCORING.md` for the 0–2 rubric and critical-fail rules. Use `RUN-TEMPLATE.md` to record comparable model/harness runs.
 
 ## End-to-end acceptance
-See `E2E-ACCEPTANCE-V1.md` for the five-workflow V1 architecture-level acceptance simulation.
+- `E2E-ACCEPTANCE-V1.md` — original five-workflow architecture simulation.
+- `E2E-COMPANY-MAINTENANCE-V2.md` — company-update lifecycle acceptance scenarios.
 
-The E2E report validates the full reasoning path on the current model. It does not replace independent cross-model execution.
-
-## Suggested cross-model use
-Before switching production usage to GPT/Codex, DeepSeek, Claude, Gemini, or another model/harness:
-1. run the core benchmark set,
-2. run relevant company-pack-specific evals,
-3. run the E2E scenarios,
-4. score using `SCORING.md`,
-5. reject runs with critical fails.
-
-The benchmark is not intended to prove that models are identical. It tests whether the reusable business method remains intact when the underlying model changes.
+A platform is not production-validated merely because the repository can be imported. Run the required business, company-pack, and E2E suites on the target model/harness.

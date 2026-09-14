@@ -1,0 +1,9 @@
+# Company maintenance working areas
+company/inbox/*
+!company/inbox/.gitkeep
+company/pending/*
+!company/pending/.gitkeep
+
+# Local/runtime customer-project memory or temporary files should not be committed by default
+memory/
+*.local

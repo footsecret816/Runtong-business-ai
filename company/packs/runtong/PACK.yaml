@@ -1,0 +1,11 @@
+id: runtong
+name: RUNTONG / WAYEAH
+version: 2.0
+status: active
+pack_type: company-specific
+source_policy: operator-confirmed-and-source-traceable
+canonical_path: company/packs/runtong
+last_architecture_migration: 2026-09-14
+notes:
+  - Preloaded RUNTONG company knowledge; zero-start onboarding is not required.
+  - Formal updates require review through company-knowledge-curation.
