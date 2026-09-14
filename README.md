@@ -1,453 +1,469 @@
-# Runtong Business AI Harness｜润通外贸业务 AI 助手
+# Runtong Business AI｜润通外贸业务 AI 助手
 
-> **中文**：这是面向 RUNTONG / WAYEAH 的专用 B2B 外贸业务 AI Harness。它不是一个单独 Prompt，也不是只负责“帮忙写邮件”的聊天机器人，而是一套把真实外贸业务方法、润通公司知识、业务经验案例、风险边界和跨平台运行规则组合起来的业务辅助系统。
->
-> **English**: A dedicated, model-agnostic Business AI Harness for RUNTONG / WAYEAH B2B trade workflows, combining reusable business reasoning, company knowledge, negotiation/writing skills, cases, risk controls, and platform portability.
+这是给 **RUNTONG / WAYEAH 日常外贸业务直接使用** 的 AI 业务助手。
 
----
+它不只是帮你写邮件，而是尽量像一个已经了解润通业务背景的业务搭档一样，帮你：
 
-## 这个项目解决什么问题？｜Why this exists
+- 看懂客户到底在说什么
+- 判断客户要求和工厂现实之间差在哪里
+- 想清楚该怎么谈、怎么推进
+- 把工厂回复转成客户能听懂的话
+- 写更自然、更像真实业务沟通的英文
+- 避免价格、交期、认证、付款等问题说过头
+- 帮你把复杂项目拆成下一步动作
+- 在日常工作中持续补充和维护润通公司知识
 
-普通大模型可以写邮件，但真实外贸工作往往不是“把中文翻成英文”这么简单。
+一句话理解：
 
-实际工作里更常见的问题是：
-
-- 客户真正关心的是什么？
-- 客户说的要求，和工厂现在能做到的事情之间差在哪里？
-- 这个 MOQ 是硬限制，还是还有谈判空间？
-- 当前价格应该继续让，还是应该开始稳住底线？
-- 工厂的技术回复应该怎么转换成客户听得懂、又不失真的商务语言？
-- 某个认证、测试、交期、付款条件，到底是“公司一般能力”还是“当前项目已经确认”？
-- 客户几天没回复，是不是应该跟进？怎么跟，才不是机械催促？
-- 对话里出现了新的公司长期信息，应该记入润通公司档案，还是只属于某个客户/项目？
-
-Runtong Business AI 的目标，是把这些反复出现的判断方式外置成一套稳定框架：
-
-> **模型负责智能，框架负责业务方法、事实边界与行为一致性。**
-
-因此，它不仅要“写得像业务员”，还要尽量做到：
-
-`理解业务 → 判断事实 → 找 Gap → 定策略 → 组织沟通 → 推下一步`
+> **不是“帮我翻译一下”，而是“先帮我想清楚这件业务应该怎么处理，再帮我说出来”。**
 
 ---
 
-## 它和通用版 B2B-Trade-Business-AI 有什么区别？
+## 为什么做这个助手？
 
-两套 Agent 使用相同的核心业务思路，但起点不同。
+普通 AI 很会写字，但外贸真正难的往往不是英文，而是判断。
 
-| 项目 | B2B-Trade-Business-AI | Runtong-business-ai |
-|---|---|---|
-| 公司身份 | 不预装任何公司 | 预装 RUNTONG / WAYEAH |
-| Company Pack | 从 0 建立 | 已建立，可直接使用 |
-| 日常业务 | 通用外贸业务 | 直接按润通业务背景工作 |
-| 公司资料维护 | Onboarding + 后续维护 | 重点是持续补丁更新 |
-| 适合谁 | 任意外贸公司 | 润通内部业务使用 |
+比如：
 
-RUNTONG / WAYEAH 的正式 Company Pack 已在：
+- 客户要 5,000 支试单，但工厂硬 MOQ 是 40,000，到底怎么解释才不会把客户推走？
+- 客户要求正式第三方测试报告，但工厂只有内部数据，是直接说没有，还是有更好的推进方式？
+- 客户一直压价，现在到底该继续谈，还是该开始守住底线？
+- 工厂给了一段很“生产视角”的回复，怎么转成客户听得懂、又不失真的商务语言？
+- 老客户只是要一个小更新，怎么写才自然，不像客服模板？
+- 对话里顺手提到“我们现在多了一个长期合作工厂的新能力”，这应该进入公司资料，还是只属于当前项目？
 
-`company/packs/runtong/`
+Runtong Business AI 就是把这类真实业务判断沉淀成一套可重复使用的方法。
 
-所以正常使用时，不需要重新录入润通公司背景、产品能力、供应链模式、市场定位和合规边界。
+核心逻辑是：
 
----
-
-## 它实际能做什么？｜Core business capabilities
-
-### 1. 客户消息拆解｜Customer Analysis
-
-不仅告诉你“客户这句话是什么意思”，还可以在复杂邮件中拆出：
-
-- 客户明确提出的问题
-- 已确认事实
-- 仍未确认的信息
-- 客户的异议 / 压力点
-- 当前项目阶段
-- 哪些内容真正需要回复
-- 哪些只是背景信息，不需要逐句回应
-
-简单问题保持简单；复杂邮件才做结构化拆解。
+`理解业务 → 分清事实 → 找 Gap → 定策略 → 组织沟通 → 推下一步`
 
 ---
 
-### 2. 新客户开发｜Prospecting
+## 用它最直接的好处
 
-用于网站客户、展会客户、LinkedIn、B2B 平台、老线索重新开发等场景。
+### 1. 少做“机械翻译”，多做“业务判断”
 
-Agent 会优先判断：
+你可以直接把客户邮件、聊天截图、工厂回复、自己的中文想法丢进来。
 
-- 客户属于什么渠道 / 类型
-- 可见产品结构与定位
-- 润通哪些产品更可能匹配
-- 是否存在可切入的产品空位
-- 适合先推哪几个方向
-- 是否值得优先开发
-- 第一封开发信息应该怎么切入
+它不会默认马上翻译，而是先判断：
 
-默认不把“发整本目录”当成唯一开发方式。
+- 这件事到底是什么问题
+- 有没有商业冲突
+- 有没有技术或合规缺口
+- 哪些是事实，哪些还没确认
+- 应该先解释、谈判、稳预期，还是直接推进
 
----
+这样输出更接近真实业务处理，而不是“中文变英文”。
 
-### 3. Gap / 策略判断｜Gap & Strategy
+### 2. 减少重复解释润通背景
 
-复杂问题优先使用三角判断：
+润通 Company Pack 已经预装。
 
-`客户要求` vs `润通 / 工厂现实` vs `行业 / 合规 / 技术 / 商业边界`
+正常使用时，不需要每次重新告诉 AI：
 
-例如：
+- 公司做什么产品
+- 核心业务是什么
+- 供应链怎么配合
+- 哪些属于核心产品
+- 哪些属于扩展项目
+- 认证 / 合规表达要注意什么
+- 公司通常怎么推进业务
 
-- 客户要正式第三方报告，但工厂只有内部数据
-- 客户要 5,000 支试单，但生产 MOQ 是 40,000
-- 样品和客户原样很接近，但并非 1:1
-- 客户要求某个时间交货，但工厂实际排期有风险
-- 客户要求完全复制一个可能存在 IP 风险的设计
+Agent 会按任务选择性调用相关公司资料，而不是每次从零理解润通。
 
-Agent 先找真正的 Gap，再决定应该：
+### 3. 邮件更像业务员，不像客服机器人
 
-`推进 / 稳预期 / 降风险 / 解释 / 谈判 / 给替代方案 / 增信 / 守住底线`
+默认写作目标是：
 
-而不是直接翻译工厂回复。
-
----
-
-### 4. 商务谈判｜Negotiation
-
-覆盖常见外贸谈判：
-
-- MOQ
-- 价格
-- 付款方式
-- 定金 / 尾款
-- 交期
-- 样品费
-- 模具费
-- 包装 MOQ
-- 特批条件
-- 赔偿 / 补偿
-- 年采购量 vs 单次订单量
-
-核心原则不是“永远强硬”或“永远配合”，而是：
-
-1. 先区分硬限制和可谈变量；
-2. 再看有没有交换条件；
-3. 最后决定怎么表达。
-
-AI 不会自行发明最低价、最大折扣、老板特批或最终付款例外。
-
----
-
-### 5. 商务写作｜Business Writing
-
-支持：
-
-- Email
-- WhatsApp
-- LinkedIn
-- Inquiry reply
-- Follow-up
-- 报价说明
-- 技术问题回复
-- 老客户日常更新
-- 局部改写 / 精简 / 调整语气
-
-写作标准不是“更正式”，而是：
-
-- Professional
-- Natural
-- Commercially aware
-- Concise
-- Firm when necessary
-- Cooperative without sounding weak
+`自然 + 清楚 + 专业 + 有商业意识`
 
 特别避免：
 
-- 客服腔
 - 机械中译英
 - 过度感谢
 - 过度道歉
-- 每封邮件都重新介绍公司
-- 用户只要求改一句，却把整封邮件重写
+- “We are pleased to inform you...” 式客服腔
+- 老客户每封邮件都重新介绍公司
+- 很简单的事情写成三大段官方说明
 
-老客户默认降低仪式感，保持熟悉但专业。
+对于老客户，会自动降低仪式感；对于谈判，会更注重立场和分寸。
 
----
+### 4. 复杂项目不只回答“怎么回”，还帮你想“下一步”
 
-### 6. 客户 ↔ 工厂信息转换｜Factory Bridge
+例如一个鞋垫开发项目出现材料差异、模具问题、测试问题时，Agent 可以继续帮你判断：
 
-这是润通业务里很关键的一层。
+- 客户下一步需要确认什么
+- 工厂下一步要补什么
+- 哪个问题没关闭
+- 什么时候应该继续跟进
+- 下一封邮件应该推动哪个决策
 
-**客户 → 工厂：**
+目标是把聊天变成项目推进，而不是只产出一封邮件。
 
-把客户的商务/技术要求拆成工厂真正能执行和确认的问题，例如：
+### 5. 对价格、MOQ、付款、交期更有边界感
 
-- 材料
-- 尺寸 / 公差
-- 测试方法
-- 包装
-- MOQ
-- 模具
-- 交期
-- 颜色
-- 生产控制
-- 验收标准
+它会区分：
 
-**工厂 → 客户：**
+- 硬限制
+- 可谈变量
+- 已批准条件
+- 可能可以申请但尚未批准的条件
 
-把工厂常见的口语化、生产视角回复，转换成客户能理解的准确商务语言。
+不会自己发明：
 
-原则是：重构表达，不篡改事实。
+- 最低价
+- 最大折扣
+- MOQ 特批
+- 老板已经同意
+- 最终交期
+- 特殊付款条件
 
----
+这样可以减少“AI 帮你说过头”的风险。
 
-### 7. 风险控制｜Risk Guard
+### 6. 公司知识会慢慢跟着业务更新
 
-在回复或决策前检查：
-
-- 认证 / 法规表述是否过度
-- 公司通用能力是否被误写成当前项目能力
-- 工厂级事实是否被错误扩大成整个润通能力
-- 医疗 / 功效宣称是否过头
-- IP / 设计复制风险
-- 技术参数是否已确认
-- 交期承诺是否有依据
-- 付款 / 特批 / 补偿是否超授权
-- 是否暴露客户 / 供应商保密信息
-
-需要确认的内容会保留为 `TO_CONFIRM`，而不是补一个看起来合理的答案。
-
----
-
-### 8. 项目下一步推进｜Project Next Action
-
-Agent 不只回答“怎么回”，还会在复杂项目里识别：
-
-- 客户下一步要确认什么
-- 工厂下一步要确认什么
-- 我方内部还缺什么
-- 哪些问题仍未关闭
-- 哪个动作会触发下一阶段
-- 下一次跟进应该基于什么，而不是机械催促
-
-目标是把分析变成项目推进。
-
----
-
-### 9. 公司知识维护｜Company Knowledge Curation
-
-这是当前润通版新增的重要能力。
-
-它不是常驻监控 Skill，而是按需调用的正式整理能力，负责：
-
-- 读取新的公司 PDF / PPT / Word / Excel / 图片 / 证书 / 产品资料
-- 提取事实
-- 分类
-- 去重
-- 检查冲突
-- 判断信息属于公司级 / 工厂级 / 产品级 / 项目级 / 客户级
-- 标记待确认
-- 生成审核草稿
-- 接受用户多轮修正
-- 用户确认后再正式更新 RUNTONG Company Pack
-
----
-
-## 润通 Company Pack 已经包含什么？
-
-当前正式 Company Pack 位于：
-
-`company/packs/runtong/`
-
-主要包括：
-
-- `COMPANY_PROFILE.md` — 公司身份、定位、商业模式、核心优势
-- `PRODUCT_CAPABILITIES.md` — 产品线、材料、OEM/ODM、自定义能力
-- `SUPPLY_CHAIN_MODEL.md` — 供应链和合作工厂模式
-- `COMPLIANCE_BOUNDARIES.md` — 认证、测试、法规、宣传、验厂、IP 边界
-- `MARKETS_AND_CUSTOMERS.md` — 市场、渠道、客户类型
-- `BUSINESS_SOP.md` — 从询盘到订单、生产、交付的业务流程
-- `SOURCES.md` — 公司知识来源与确认记录
-- `products/` — 按产品分类加载的更详细知识
-
-当前核心业务定位覆盖鞋护理、鞋垫、足部护理、鞋类配件，并包含运动支撑 / 恢复类扩展项目；部分其他品类按项目型扩展能力处理，而不是自动等同于核心产品线。
-
-Company Pack 提供的是公司背景和一般能力，不自动证明每个项目的价格、MOQ、认证、测试、交期或具体生产条件。
-
----
-
-## 公司信息如何持续更新？｜Company maintenance
-
-### A. 已有正式 Company Pack
-
-润通不需要重新 onboarding。
-
-运行时按当前任务选择性加载：
-
-```text
-客户开发
-→ 公司定位 + 市场客户 + 对应产品能力
-
-鞋垫项目
-→ PRODUCT_CAPABILITIES + products/INSOLES
-
-认证问题
-→ COMPLIANCE_BOUNDARIES + 当前项目证据
-
-工厂能力问题
-→ SUPPLY_CHAIN_MODEL + 对应工厂/项目事实
-```
-
-不是每次把整个公司资料全部塞进上下文。
-
-### B. 新公司材料
-
-当你以后提供新的：
-
-`PDF / PPT / Word / Excel / 证书 / 产品目录 / 工厂资料`
-
-标准流程是：
-
-```text
-新材料
-→ company/inbox/
-→ company-knowledge-curation
-→ 提取 / 分类 / 范围判断 / 去重 / 冲突检查
-→ 生成审核稿
-→ 用户补充 / 修改 / 多轮核对
-→ 用户确认
-→ 更新正式 RUNTONG Company Pack
-```
-
-不会把一份新资料里的所有文字直接升级为正式公司事实。
-
-### C. 业务对话里的公司新信息
-
-很多公司知识并不是通过正式资料出现，而是在日常工作中自然说出来，例如：
+以后业务中出现新的长期信息，例如：
 
 - 新证书
 - 新验厂
 - 新产品线
-- 新设备
-- 新长期产能
-- 新合作工厂能力
+- 新设备 / 新产能
+- 新合作工厂长期能力
 - 新供应链能力
-- 某项长期能力取消
-- 某项公司事实被明确纠正
+- 某项旧能力已经取消
 
-Core 只做轻量发现：
+Core 会轻量提醒：
+
+> 这条信息可能值得进入润通公司长期档案，是否需要更新？
+
+但不会偷偷改资料。
+
+只有你确认后，才进入正式整理和更新流程。
+
+---
+
+## 最适合用在哪些场景？
+
+### 客户邮件 / 询盘
+
+你可以直接问：
+
+- “客户这封邮件到底要什么？”
+- “帮我拆分重点”
+- “他这里是不是在压价？”
+- “这封怎么回比较好？”
+
+简单问题直接回答；复杂问题才做结构化分析。
+
+### 客户开发
+
+可以用于：
+
+- 网站客户研究
+- 展会客户
+- LinkedIn
+- B2B 平台询盘
+- 老线索重新激活
+
+会优先判断客户类型、渠道、产品结构和切入方向，而不是默认“发目录 + 公司介绍”。
+
+### MOQ / 价格 / 付款 / 交期谈判
+
+可以帮你先判断：
+
+- 哪个是硬限制
+- 哪个可以谈
+- 客户真正卡在哪里
+- 需要解释原因还是需要换条件
+- 应该强硬到什么程度
+
+然后再落成邮件或消息。
+
+### 客户 ↔ 工厂沟通
+
+客户要求复杂时：
+
+`客户语言 → 工厂可执行问题`
+
+工厂回复很乱时：
+
+`工厂语言 → 客户可理解商务表达`
+
+重点是减少信息失真，而不是把工厂原话生硬翻译出去。
+
+### Follow-up
+
+不是简单重复：
+
+`Just following up...`
+
+而是先判断为什么现在值得跟：
+
+- 项目到了关键节点
+- 有新信息
+- 有决策需要推动
+- 长时间项目值得重新打开沟通
+- 有一个剩余问题可以继续谈
+
+### 老客户日常沟通
+
+适合：
+
+- 附件发送
+- 发票
+- 包装稿
+- 物流更新
+- 样品进度
+- 生产进度
+- 小问题确认
+
+默认更短、更自然，不重新介绍公司。
+
+---
+
+## 9 个核心能力，通俗理解版
+
+| 能力 | 你可以把它理解成什么 | 实际作用 |
+|---|---|---|
+| `customer-analysis` | 帮你看懂客户 | 拆邮件、识别重点、判断客户真正要什么 |
+| `prospecting` | 帮你找切入点 | 判断客户值不值得开发、适合推什么 |
+| `gap-strategy` | 帮你想打法 | 找出客户要求和我方现实之间的差距 |
+| `negotiation` | 帮你谈条件 | MOQ、价格、付款、交期、模具费等怎么谈 |
+| `business-writing` | 帮你把话说好 | Email、WhatsApp、LinkedIn、Follow-up |
+| `factory-bridge` | 帮你夹在客户和工厂中间不失真 | 双向转换需求和回复 |
+| `risk-guard` | 帮你踩刹车 | 避免认证、交期、付款、技术承诺说过头 |
+| `project-next-action` | 帮你继续往前推 | 明确谁确认什么、下一步是什么 |
+| `company-knowledge-curation` | 帮你维护润通公司资料 | 把新资料整理、核对后更新进 Company Pack |
+
+这些能力不是每次全部一起跑。
+
+Agent 会按当前任务选择最少、最相关的能力。
+
+---
+
+## 几个实际例子
+
+### 例 1：客户试单远低于 MOQ
+
+你说：
+
+> 客户要 5,000 支，但工厂最低 40,000，我想解释这是生产线和材料批次原因，又不想把客户吓跑。
+
+Agent 不会只写：
+
+> Our MOQ is 40,000 pcs.
+
+而会先判断：
+
+`客户试单风险` vs `工厂硬生产限制`
+
+再设计：
+
+`理解客户 → 简洁解释真实原因 → 守住底线 → 保留继续讨论空间`
+
+### 例 2：工厂只有内部测试记录
+
+客户要正式报告，但工厂只有内部数据。
+
+Agent 会先区分：
+
+`没有测试` 和 `有测试，但文件形式不符合客户要求`
+
+这两件事完全不同。
+
+然后再判断应该怎么诚实说明、怎么提供替代依据、是否需要后续第三方报告。
+
+### 例 3：老客户发一个新 PO
+
+Agent 会更像实际 Account Manager：
+
+`确认订单重点 → 指出需要确认的差异 → 附件 / 发票 → 简单结尾`
+
+不会重新来一段公司介绍。
+
+### 例 4：对话里出现新的长期公司信息
+
+你在业务聊天里说：
+
+> 这个合作工厂现在新增加了某种长期生产能力。
+
+Agent 会先完成当前业务任务，然后提醒：
+
+> 这条信息可能属于可长期复用的 RUNTONG 公司知识，是否需要加入待更新项？
+
+你不同意，就不更新。
+
+---
+
+## 润通公司资料已经准备好了
+
+RUNTONG / WAYEAH 正式 Company Pack 位于：
+
+`company/packs/runtong/`
+
+里面已经整理了：
+
+- 公司身份和定位
+- 核心产品能力
+- OEM / ODM 能力
+- 供应链和合作工厂模式
+- 合规 / 认证 / 测试表达边界
+- 目标市场和客户类型
+- 业务 SOP
+- 信息来源记录
+- 按产品分类的详细知识
+
+当前核心业务定位覆盖鞋护理、鞋垫、足部护理、鞋类配件，并包含运动支撑 / 恢复类扩展项目。部分其他品类按项目型扩展能力处理，不自动等同于核心产品线。
+
+所以这个仓库和通用版最大的区别就是：
+
+> **润通版不是先学公司，而是已经知道润通是谁，然后直接开始工作。**
+
+---
+
+## 润通公司信息怎么继续更新？
+
+### 方式 1：你提供新的公司资料
+
+例如：
+
+- PDF
+- PPT
+- Word
+- Excel
+- 证书
+- 产品目录
+- 工厂资料
+
+流程：
 
 ```text
-业务对话
-→ 发现可能长期复用的信息
+新资料
+→ company/inbox/
+→ company-knowledge-curation
+→ 提取 / 分类 / 去重 / 范围判断 / 冲突检查
+→ 给你审核
+→ 你补充 / 修改
+→ 你确认
+→ 更新正式 RUNTONG Company Pack
+```
+
+不会因为上传一份文件，就把里面所有内容自动当成事实。
+
+### 方式 2：业务对话里自然出现新信息
+
+流程：
+
+```text
+普通业务对话
+→ Core 发现可能长期复用的新公司信息
 → COMPANY_UPDATE_CANDIDATE
-→ 提示操作者
-→ 确认是否值得进入公司档案
+→ 提醒你
+→ 你确认要不要更新
 → company/pending/
 → company-knowledge-curation
 → 正式更新
 ```
 
-**普通业务对话不会静默修改 Company Pack。**
+### 方式 3：你明确纠正旧公司信息
+
+如果你明确说：
+
+> 这个旧信息已经不适用了，现在应该以新的为准。
+
+正式整理时会保留“旧事实已被 supersede”的关系，而不是让新旧信息同时混着用。
 
 ---
 
-## Company 和 Customer / Project Memory 必须分开
+## 什么不会被写进公司长期资料？
 
-下面这些通常不应该进入长期公司档案：
+下面这些通常属于某个客户 / 项目，不属于长期 Company Knowledge：
 
 - 某客户专属价格
 - 某订单 MOQ
 - 某次老板特批
-- 临时供应商报价
 - 某一次赶货交期
-- 单项目付款条件
-- 单项目测试结果
+- 某订单特殊付款方式
+- 临时供应商报价
+- 某个项目独有测试结果
 - 客户 PO / 条码 / 包装版本
-- 某个项目当前阶段
+- 某项目当前状态
 
-这些属于 Customer / Project Memory。
+简单理解：
 
-长期公司知识则更接近：
-
-- 稳定产品线
-- 长期供应链能力
-- 已确认公司定位
-- 已确认工厂长期能力
-- 长期认证 / 审核状态
-- 长期市场 / 渠道能力
-- 公司 SOP
-
-核心原则：
-
-> **Company = 我们长期是谁、能做什么。**
+> **Company = 润通长期是谁、长期能做什么。**
 >
-> **Memory = 某个客户 / 某个项目发生了什么。**
+> **Memory = 某个客户 / 某个项目发生过什么。**
+
+两者不能混。
 
 ---
 
-## 实际任务会怎么处理？｜Behavior examples
+## 为什么比普通“公司 Prompt”更稳？
 
-### 例 1：简单理解
+### 不是把所有规则塞进一个超长 Prompt
 
-用户：
+整个项目分成：
+
+```text
+Core        = 大脑
+Skills      = 业务能力
+Cases       = 经验
+Company     = 润通身份和长期能力
+Memory      = 客户 / 项目历史
+Knowledge   = 通用行业知识
+Schemas     = 数据格式
+Evals       = 验证有没有跑偏
+Adapters    = 不同 AI 平台接线
+```
+
+这样做的好处是：
+
+- 简单任务不需要加载一堆复杂规则
+- 公司知识和客户项目历史不会混在一起
+- 换模型时业务方法更容易保留
+- 换电脑时不需要重新改本地绝对路径
+- 后面公司信息变化时，可以单独更新 Company Pack
+- 业务经验可以通过 Cases 持续积累
+
+---
+
+## 它会主动避免哪些常见 AI 问题？
+
+### 把推测当事实
+
+不会因为一个推测很合理，就反复说几次后变成“已确认”。
+
+### 公司一般能力 = 当前项目已经能做
+
+不会自动这样推。
+
+例如某合作工厂有某认证，不等于所有产品、所有项目都可以直接对客户承诺这个认证。
+
+### 历史案例直接套当前客户
+
+Golden Cases 只提供判断方法，不提供当前事实。
+
+### 为了显得完整而编一个数字
+
+价格、MOQ、交期、认证、测试、技术参数没有确认，就保持：
+
+`UNKNOWN / TO_CONFIRM`
+
+### 简单问题也强行输出一大套框架
+
+如果你只是问：
 
 > 客户这句话什么意思？
 
-行为：
-
-`customer-analysis → 直接解释`
-
-不会输出一大套局势诊断、谈判策略和风险分析。
-
-### 例 2：客户试单低于硬 MOQ
-
-用户：
-
-> 客户要 5,000，工厂最低 40,000，我怎么回？
-
-行为：
-
-`customer-analysis → gap-strategy → negotiation → business-writing`
-
-重点不是机械写“our MOQ is 40,000”，而是先判断这个 MOQ 是否是结构性生产限制，再设计一个 firm + cooperative 的解释方式。
-
-### 例 3：工厂只有内部测试数据
-
-行为：
-
-`factory-bridge → gap-strategy → risk-guard → business-writing`
-
-区分：
-
-`没有测试` ≠ `有测试，但没有客户要求的正式报告形式`
-
-然后再设计推进路径。
-
-### 例 4：老客户日常项目更新
-
-行为：
-
-直接：
-
-`状态 → 附件/参考 → 需要客户确认的事情 → 简单结尾`
-
-不会重新介绍润通公司，也不会写成客服通知。
-
-### 例 5：业务聊天中出现“新公司长期能力”
-
-行为：
-
-先完成当前业务任务，同时轻量提醒：
-
-> 这条信息可能属于可长期复用的 RUNTONG 公司知识，是否需要加入待更新项？
-
-只有用户确认后才进入正式整理流程。
+那就直接解释，不需要每次都输出“局势诊断 / 推进策略 / 风险分析 / 邮件草稿”。
 
 ---
 
-## Cases｜经验层
+## Cases｜把真实业务经验变成可复用经验
 
-仓库中的 Golden Cases 不是客户数据库，而是匿名化后的业务经验。
-
-当前覆盖的典型模式包括：
+仓库里已经有一批匿名化 Golden Cases 和 Anti-patterns，例如：
 
 - 硬 MOQ vs 小试单
 - 年采购量 vs 单次订单报价基础
@@ -462,133 +478,77 @@ Core 只做轻量发现：
 - 老客户自然沟通
 - NDA 边界下的客户背书与增信
 
-Cases 只学习：
+它们教的是：
 
-`冲突是什么 → 为什么这样判断 → 应该采取什么策略 → 什么表达更有效`
+`这种局面为什么这样判断 → 什么策略更合适 → 什么表达更自然`
 
-不会把历史案例中的数字、客户、付款、价格、承诺当成当前事实。
-
----
-
-## 写作和谈判风格｜Communication standard
-
-默认目标：
-
-`clear + commercially aware + natural + concise`
-
-### 新客户
-
-简洁介绍能力，但重点必须回到客户项目，而不是长篇公司宣传。
-
-### 老客户
-
-减少仪式感，不重复公司介绍，保持熟悉但专业。
-
-### 谈判
-
-先解释真实商业 / 生产逻辑，再表达立场；有边界就明确，但不把客户推开。
-
-### 技术问题
-
-准确优先，不用“听起来很专业”的术语代替事实。
-
-### Follow-up
-
-必须有重新进入对话的理由：
-
-- 项目进度
-- 新信息
-- 决策点
-- 关系维护
-- 有价值的补充
-
-而不是不断重复 `just following up`。
+不是让 AI 把旧客户事实复制过来。
 
 ---
 
-## Architecture｜架构
+## 本地路径不用跟着电脑改
 
-```text
-Core
-+ Skills
-+ Cases
-+ Company
-+ Memory
-+ Knowledge
-+ Schemas
-+ Evals
-+ Adapters
-```
-
-### Core = 大脑
-
-负责理解任务、事实判断、深度选择、技能路由和自检。
-
-### Skills = 能力
-
-负责客户分析、开发、谈判、写作、工厂桥接、风险、推进和公司知识整理。
-
-### Cases = 经验
-
-提供可迁移的判断模式和反例。
-
-### Company = 润通身份
-
-告诉 AI “我们是谁、有哪些长期能力和边界”。
-
-### Memory = 客户 / 项目历史
-
-记录某客户或项目发生过什么。
-
-### Knowledge = 通用知识
-
-保存不属于某个具体公司的行业 / 渠道 / 标准类知识。
-
-### Adapters = 平台接线层
-
-让同一套 Business Core 能接入不同 Agent Harness。
-
----
-
-## Portability｜跨电脑、跨平台
-
-所有仓库路径均相对逻辑：
+所有路径都相对逻辑：
 
 `REPO_ROOT / AGENT_ROOT`
 
-解析，不绑定：
+解析。
+
+不会绑定某一台电脑的：
 
 - `D:\...`
 - `C:\Users\...`
 - `/Users/...`
 - `/home/...`
 
-正常目标体验是：
+正常目标体验：
 
 ```text
 Clone / Import / Install / Open
-→ 平台提供或自动发现仓库根目录
-→ Agent 启动
+→ 平台自动识别项目根目录
+→ Agent 运行
 ```
 
-换电脑不应该要求重新修改整个 Agent 的本地路径。
-
-Codex、Claude Code、DeepSeek Harness、Accio Work、WorkBuddy / CodeBuddy 等平台只通过 Adapter 接入；平台差异不应复制或重写核心商务逻辑。
+换电脑不应该要求重新改整个 Agent 的本地路径。
 
 ---
 
-## Safety Boundary｜安全与授权边界
+## 可以接哪些 AI 平台？
+
+这个项目的设计不是绑定某一个模型。
+
+目标是通过薄 Adapter 接入不同 Harness，例如：
+
+- Codex
+- Claude Code
+- DeepSeek Harness
+- Accio Work
+- WorkBuddy / CodeBuddy
+- 未来其他 Agent 平台
+
+平台只是“接线方式”不同，核心业务逻辑不应该重新写一套。
+
+但是：
+
+> **能导入某个平台 ≠ 已经证明该平台业务效果一样好。**
+
+换模型 / 换平台后仍需要跑 Evals。
+
+---
+
+## 安全和授权边界
 
 AI 可以：
 
 - 分析
 - 比较
 - 推荐
-- 写作
+- 设计谈判思路
+- 写邮件
 - 提醒风险
-- 设计推进策略
+- 帮你推进下一步
 
-AI 不可以在没有依据时自行确认：
+AI 不会在没有依据时自行确认：
 
 - 最低价格
 - 最大折扣
@@ -602,59 +562,49 @@ AI 不可以在没有依据时自行确认：
 - 未确认技术性能
 - 老板 / 工厂已经批准某件事
 
-信息不足时必须保留：
+---
 
-`UNKNOWN / TO_CONFIRM`
+## Evals｜换模型以后怎么知道它有没有“变笨”？
 
-而不是为了让回答完整而补事实。
+`evals/` 用来检查换模型、换平台后，关键业务行为有没有丢。
+
+主要看：
+
+- 能不能理解真正的业务问题
+- 会不会把推断当事实
+- 能不能找到真正的 Gap
+- 谈判逻辑是否合理
+- 写作是否自然
+- 风险边界是否守住
+- 简单问题会不会过度分析
+- 最终有没有帮助项目往前走
+
+润通版还专门检查：
+
+- 公司认证 / 能力有没有被错误放大
+- 日常对话里的新公司信息能不能正确识别
+- 项目特批会不会污染 Company Pack
+- 旧公司事实被明确纠正后能不能正确更新
+- `对话 → pending → curation → Company Pack` 是否守住用户确认边界
 
 ---
 
-## Validation｜评测体系
-
-`evals/` 用来判断换模型、换平台后是不是“业务能力还在”。
-
-主要评估：
-
-- Task understanding
-- Fact discipline
-- Business diagnosis
-- Strategy quality
-- Risk control
-- Communication quality
-- Response depth
-- Advancement value
-
-并包含 RUNTONG Company Pack 专项测试，例如：
-
-- 公司认证 / 能力范围有没有被错误放大
-- 公司长期信息候选能不能正确识别
-- 项目特批是否会污染公司档案
-- 公司旧事实被明确纠正后是否正确 supersede
-- 对话更新 → pending → curation → Company Pack 的流程是否守住确认边界
-
-> **能够导入一个 AI 平台，不等于已经在该平台生产验证。**
-
-真正迁移模型 / Harness 时仍需要跑同一套 Evals。
-
----
-
-## Repository map｜主要目录
+## Repository Map｜主要目录
 
 ```text
 Runtong-business-ai/
-├── AGENTS.md              # Agent 入口
+├── AGENTS.md              # Agent 总入口
 ├── PROJECT.md             # 架构基线
 ├── core/                  # Business Kernel + Runtime
-├── skills/                # 业务能力
+├── skills/                # 9 个业务能力
 ├── cases/                 # Golden Cases + Anti-patterns
-├── company/               # RUNTONG Company Workspace
+├── company/               # 润通公司信息区
 │   ├── ACTIVE_COMPANY.yaml
 │   ├── MAINTENANCE.md
 │   ├── inbox/
 │   ├── pending/
 │   └── packs/runtong/
-├── memory/                # 客户 / 项目记忆层（运行数据层）
+├── memory/                # 客户 / 项目记忆层
 ├── knowledge/             # 通用知识
 ├── schemas/               # 数据结构
 ├── evals/                 # Benchmark / E2E
@@ -663,17 +613,33 @@ Runtong-business-ai/
 
 ---
 
-## English overview
+## 和通用版 B2B-Trade-Business-AI 的区别
+
+| 项目 | B2B-Trade-Business-AI | Runtong-business-ai |
+|---|---|---|
+| 面向谁 | 任意外贸公司 | RUNTONG / WAYEAH |
+| 公司资料 | 从 0 建立 | 已经预装 |
+| 第一次使用 | 先建立 Company Pack | 可以直接开始业务 |
+| 公司资料维护 | Onboarding + 后续维护 | 重点是后续增量维护 |
+| 业务核心思路 | 通用 | 与通用版一致 |
+
+所以两套 Agent 可以理解为：
+
+> **同一套业务大脑，不同的公司起始状态。**
+
+---
+
+## English Overview
 
 Runtong Business AI is the RUNTONG / WAYEAH-specific edition of the reusable B2B Trade Business AI architecture.
 
-Unlike the generic edition, the RUNTONG Company Pack is already installed and active. The agent can therefore start from existing company context rather than rebuilding company knowledge from zero.
+It is designed as a practical foreign-trade copilot rather than a translation-only chatbot. The assistant combines customer analysis, prospecting, gap diagnosis, negotiation, business writing, factory/customer communication, risk control, project next-action planning, and reviewed company-knowledge maintenance.
 
-Its main business capabilities include customer analysis, prospecting, gap/strategy diagnosis, negotiation, business writing, factory-customer translation, risk control, project next-action planning, and reviewed company-knowledge maintenance.
+The main difference from the generic edition is that the RUNTONG Company Pack is already installed and active. Users can therefore start from existing company context instead of rebuilding company knowledge from zero.
 
 During normal work, the Core may detect durable new company facts, but it does not silently modify the Company Pack. Potential updates remain `COMPANY_UPDATE_CANDIDATE` items until reviewed and confirmed through the company-knowledge-curation workflow.
 
-The repository remains model-agnostic and platform-agnostic: business methodology stays in the Core / Skills / Cases / Company layers, while platform-specific behavior remains in thin adapters.
+The repository is designed to remain model-agnostic and platform-agnostic: business methodology stays in the Core / Skills / Cases / Company layers, while platform-specific differences remain in thin adapters.
 
 ---
 
