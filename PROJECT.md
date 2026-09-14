@@ -1,76 +1,66 @@
-# Runtong Business AI Harness — V1 Architecture Baseline
+# Runtong Business AI — Company-Maintenance Architecture Baseline
 
-## Goal
-Preserve and externalize the useful business-assistance behavior developed through real B2B customer work, while keeping the framework reusable across AI models and agent platforms.
+## Purpose
+A dedicated RUNTONG / WAYEAH Business AI Harness for B2B foreign-trade work.
 
-## V1 architecture
-- 1 primary Business Copilot entry
-- 1 lightweight Business Kernel
-- 1 model-agnostic runtime contract
-- 8 broad business skills
-- abstract Golden Cases and Anti-patterns
-- reusable business knowledge layer with swappable Company Packs
-- customer-memory schema separated from reusable cases
-- cross-model evaluation suite
-- thin, peer-level platform adapters
+The business methodology remains model-agnostic and platform-agnostic, but this repository is intentionally **company-specific**: the RUNTONG / WAYEAH Company Pack is already installed and is the default company context.
 
-## Generic Core First
+## Core runtime
+`Context → Understand → Diagnose → Decide → Communicate → Advance`
 
-No platform is the architectural center.
+For complex commercial conflict: Strategy before Writing.
+For simple tasks: stay simple.
 
-The canonical Business AI consists of:
-- Runtime Contract,
-- Business Kernel,
-- Skills,
-- Cases,
-- Company Packs,
-- Customer Memory rules/schema,
-- Evals.
+## Architecture
+- `core/` — model-agnostic runtime and lightweight business kernel
+- `skills/` — 9 reusable business capabilities, including company-knowledge curation
+- `cases/` — anonymized Golden Cases and anti-patterns
+- `company/` — RUNTONG company workspace, maintenance queue, and formal Company Pack
+- `memory/` / external memory — customer/project history layer when available
+- `knowledge/` — generic non-company knowledge only
+- `schemas/` — data contracts
+- `evals/` — business and company-maintenance benchmarks
+- `adapters/` — thin platform integration layer
 
-Codex, Claude Code, DeepSeek Harness, WorkBuddy / CodeBuddy, Accio Work, and future platforms should connect through peer adapters. Platform-specific boot files, skill packaging, tool wiring, permissions, and memory bridges must not fork the canonical business methodology.
+## RUNTONG Company model
+The formal company source is:
 
-See:
-- `adapters/PLATFORM_ADAPTER_CONTRACT.md`
-- `adapters/COMPATIBILITY_MATRIX.md`
+`company/packs/runtong/`
 
-## Core philosophy
-Model intelligence should remain useful, but critical business behavior must not depend entirely on one model's hidden intuition.
+The repository does not need zero-start onboarding. Instead, the company layer supports continuous maintenance through three update paths:
 
-The framework therefore externalizes the behaviors most likely to be lost when switching models:
-- task intent recognition,
-- context discipline,
-- source precedence and superseded-fact handling,
-- fact vs inference separation,
-- strategy-before-writing for complex issues,
-- selective skill routing,
-- business-risk boundaries,
-- output-depth control,
-- final self-check.
+1. **Source-material update** — new PDF/PPT/Word/Excel/certificate/catalogue or other company material → `company/inbox/` → `company-knowledge-curation` → review → formal pack update.
+2. **Business-conversation patch** — normal business dialogue reveals a likely durable company fact → Core marks `COMPANY_UPDATE_CANDIDATE` → operator decides whether to review → `company/pending/` → curation → pack update.
+3. **Explicit company correction** — operator directly states that an existing RUNTONG company fact has changed and asks to update it → curation checks scope/source/supersession → review → formal update.
 
-## Non-goals for V1
-- Do not create many autonomous sub-agents.
-- Do not encode every possible business situation as rigid if/else logic.
-- Do not store raw identifiable customer histories in the reusable case library.
-- Do not attempt to replace model intelligence with a large deterministic workflow.
-- Do not prebuild native adapters for every possible platform before they are needed.
+## Company Delta Detection
+The Core performs only lightweight detection during normal business work. It must not continuously run the heavy curation skill and must not silently rewrite formal company facts.
 
-## Portability principle
-The intended invariant is business method, not identical wording. A different model may write differently, but should preserve factual discipline, reasoning pattern, negotiation logic, risk boundaries, and business usefulness.
+A candidate should normally be:
+- relatively stable,
+- reusable across future RUNTONG business,
+- company/factory/product scoped rather than customer/project-only,
+- supported by operator statement or source evidence.
 
-A platform is not considered production-validated merely because the repository can be imported. Native adapter implementation must be followed by the canonical benchmark and E2E suite.
+Examples that normally **do not** enter the Company Pack:
+- one customer's price,
+- one project's MOQ,
+- one-off boss approval,
+- temporary supplier quote,
+- rush delivery exception,
+- project-specific payment exception,
+- unconfirmed inference.
 
-## V1 acceptance status
-Architecture-level end-to-end simulation completed on the current model using five realistic workflows:
-- new prospect development,
-- hard MOQ conflict,
-- material/sample deviation,
-- simple interpretation,
-- conflicting project memory + company-general compliance scope.
+## Fact and scope discipline
+Current-project confirmed facts override company-general knowledge.
 
-Result: **PASS WITH ONE FIX APPLIED**.
+Company-level, factory-level, product-level, project-level, and customer-level facts must remain distinguishable. Certifications, testing capability, capacity, production claims, and factory capability must not be generalized beyond their confirmed scope.
 
-The fix formalized active-project source precedence so newer explicit project facts cannot be overridden by older memory, company-general knowledge, or abstract cases.
+## Portability
+All repository paths are resolved relative to logical `AGENT_ROOT` / `REPO_ROOT`. Machine-specific absolute paths are runtime-only state and must not be persisted into reusable business knowledge.
 
-See `evals/E2E-ACCEPTANCE-V1.md`.
-
-This result does not prove equivalent behavior on DeepSeek, Claude, Gemini, or another model. Target models must run the same benchmark and E2E suite before production replacement.
+## Validation
+Existing business benchmarks remain authoritative. Additional company-maintenance evals verify that:
+- durable new RUNTONG facts are detected as candidates rather than silently committed;
+- customer/project exceptions do not pollute Company Knowledge;
+- explicit company corrections can supersede older company facts only through the review/update workflow.
